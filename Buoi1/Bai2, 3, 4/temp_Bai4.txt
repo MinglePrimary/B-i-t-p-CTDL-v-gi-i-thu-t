@@ -1,0 +1,60 @@
+﻿#include <stdio.h>
+#include <iostream>
+#include <string>
+#define SIZE 100
+using namespace std;
+
+void input(int &x)
+{
+	scanf("%d", &x);
+}
+
+char fetchPosValue(int r)
+{
+	if (r == 1) return '1';
+		switch (r)
+		{
+		case (10): return 'A';
+			break;
+		case (11): return 'B';
+			break;
+		case (12): return 'C';
+			break;
+		case (13): return 'D';
+			break;
+		case (14): return 'E';
+			break;
+		case (15): return 'F';
+			break;
+		}
+}
+
+void getDecToDex(int x, char A[])
+{
+	int dec = x, pos = 0, rem = 1;
+	while (dec > 0)
+	{
+		rem = dec % 16;
+		A[pos] = fetchPosValue(rem);
+		pos++;
+		dec = dec / 16;
+	}
+	A[pos] = '\0';
+}
+
+
+void output(char answer[])
+{
+	printf("%s", answer); //!
+}
+
+int main()
+{
+	char A[SIZE];
+	int x, n;
+	input(x);
+	getDecToDex(x, A);
+	output(A);
+	system("pause");
+	return 0;
+}
