@@ -1,9 +1,6 @@
-﻿//Bài 2: Dùng mảng một chiều để lưu trữ một lớp học có N sinh viên.Biết rằng mỗi sinh viên
-//bao gồm các thông tin sau : Tên(chuỗi ký tự), Mã số sinh viên(chuỗi ký tự), Điểm trung bình.
-//Hãy viết hàm thực hiện các yêu cầu sau :
-//d. Tìm một sinh viên có tên X trong lớp học (X nhập từ bàn phím)
-
+﻿
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <string>
 using namespace std;
@@ -58,7 +55,6 @@ void addClass(Class &MyClass, Student *student)
 		MyClass.SHead = student;
 	}
 }
-
 void inputClass(Class &MyClass, int &n)
 {
 	printf("?N student: ");
@@ -78,7 +74,6 @@ void inputClass(Class &MyClass, int &n)
 		addClass(MyClass, sv);
 	}
 }
-
 void outputClass(Class MyClass)
 {
 	printf("! Check class: \n");
@@ -91,7 +86,7 @@ void outputClass(Class MyClass)
 	}
 }
 
-void sortStudent(Class &myClass)
+void sortStudent_QuickSort(Class &myClass)
 {
 	Class myClass1;
 	Class myClass2;
@@ -107,14 +102,14 @@ void sortStudent(Class &myClass)
 		Student *q = p;
 		p = p->SNext;
 		q->SNext = NULL;
-		if (q->DiemTrungBinh > pivot->DiemTrungBinh)
+		if (q->DiemTrungBinh < pivot->DiemTrungBinh)
 			addClass(myClass1, q);
 		else
 			addClass(myClass2, q);
 	};
 
-	sortStudent(myClass1);
-	sortStudent(myClass2);
+	sortStudent_QuickSort(myClass1);
+	sortStudent_QuickSort(myClass2);
 	// ghep noi ds 1 + pivot
 	if (!isEmptyClass(myClass1))
 	{
@@ -131,21 +126,53 @@ void sortStudent(Class &myClass)
 		myClass.STail = pivot;
 }
 
-void checkNStudent_Name(Class MyClass)
+/* Bubble sort the given linked list */
+void sortStudent_BubbleSort(Student *start)
 {
-	string XName;
-	bool flag = false;
-	printf("?Student's name: ");
-	cin >> XName;
-	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
-		if (i->Name == XName)
+	int swapped, i;
+	Student *ptr1;
+	Student *lptr = NULL;
+
+	/* Checking for empty list */
+	if (start == NULL)
+		return;
+
+	do
+	{
+		swapped = 0;
+		ptr1 = start;
+
+		while (ptr1->SNext != lptr)
 		{
-			cout << "ID: " << i->ID;
-			flag = true;
-			break;
+			if (ptr1->DiemTrungBinh > ptr1->SNext->DiemTrungBinh)
+			{
+				swap(ptr1, ptr1->SNext);
+				swapped = 1;
+			}
+			ptr1 = ptr1->SNext;
 		}
-	if (flag == false)
-		printf("\n!Not found\n");
+		lptr = ptr1;
+	} while (swapped);
+}
+
+/* function to swap data of two nodes a and b*/
+void swap(Student *a, Student *b)
+{
+	double Temp = a->DiemTrungBinh;
+	a->DiemTrungBinh = b->DiemTrungBinh;
+	b->DiemTrungBinh = Temp;
+}
+
+void outputFile(Class MyClass, int n)
+{
+	fstream f;
+	f.open("D:\outputStudent.txt", ios::out);
+	f <<"N= "<< n<< endl;
+	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
+	{
+		f << i->ID << " " << i->Name << " " << i->DiemTrungBinh << endl;
+	}
+	f.close();
 }
 
 int main()
@@ -154,10 +181,10 @@ int main()
 	Class MyClass;
 	initClass(MyClass);
 	inputClass(MyClass, n);
-	//outputClass(MyClass);
-	sortStudent(MyClass);
-	//outputClass(MyClass);
-	checkNStudent_Name(MyClass);
+	//sortStudent_QuickSort(MyClass);
+	sortStudent_BubbleSort(MyClass.SHead);
+	outputClass(MyClass);
+	outputFile(MyClass, n);
 	system("pause");
 	return 0;
 }

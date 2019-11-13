@@ -1,0 +1,79 @@
+﻿/*Bài 2: Phát sinh ngẫu nhiên mảng 1 chiều có N phần tử, mỗi phần tử có kiểu dữ liệu là 1 số
+nguyên. Sắp xếp và đo thời gian sắp xếp của các thuật toán ở bài 1*/
+// quick sort
+#include <stdio.h>
+#include <iostream>
+#include <chrono>
+#define SIZE 100
+
+using namespace std;
+using namespace std ::chrono;
+
+void inputN(int &n)
+{
+	printf("Nhap n: ");
+	scanf("%d", &n);
+}
+// ham khoi tao cac gt trong mang A
+void initA(int A[], int n)
+{
+	for (int i = 0; i < n; i++)
+		A[i] = rand() % 100 + 1;
+}
+
+
+void output(int A[], int n)
+{
+	for (int i = 0; i < n; i++)
+		printf("%d ", A[i]);
+	printf("\n");
+}
+
+void swap(int &x, int &y)
+{
+	int temp = x;
+	x = y;
+	y = temp;
+}
+
+void quickSort(int A[], int left, int right)
+{
+	int pivot = A[(left + right) / 2]; // bien cam canh
+	int i = left, j = right;
+	// buoc phan hoach
+	while (i <= j)
+	{
+		while (A[i] < pivot) // tim vi tri sai
+			i++;
+		while (A[j] > pivot) // tim vi tri sai
+			j--;
+		if (i <= j)
+		{
+			swap(A[i], A[j]);
+			i++;
+			j--;
+		}
+	}
+	// buoc de qui
+	if (left < j)
+		quickSort(A, left, j);
+	if (right > i)
+		quickSort(A, i, right);
+}
+
+int main()
+{
+	int A[SIZE], n;
+	inputN(n);
+	initA(A, n);
+	output(A, n);
+	auto start = high_resolution_clock::now();
+	int left = 0, right = n - 1;
+	quickSort(A, left, right);
+	auto end = high_resolution_clock::now();
+	auto time = duration_cast<nanoseconds>(end - start);
+	output(A, n);
+	cout << "It takes " << time.count() << " nanoseconds" << endl;
+	system("pause");
+	return 0;
+}

@@ -1,10 +1,8 @@
-﻿//Bài 2: Dùng mảng một chiều để lưu trữ một lớp học có N sinh viên.Biết rằng mỗi sinh viên
-//bao gồm các thông tin sau : Tên(chuỗi ký tự), Mã số sinh viên(chuỗi ký tự), Điểm trung bình.
-//Hãy viết hàm thực hiện các yêu cầu sau :
-//d. Tìm một sinh viên có tên X trong lớp học (X nhập từ bàn phím)
+﻿
 
 #include <iostream>
 #include <stdio.h>
+#include <fstream>
 #include <string>
 using namespace std;
 
@@ -20,11 +18,11 @@ struct Class
 {
 	Student *SHead;
 	Student *STail;
-};
+};	
 
 void initClass(Class &MyClass)
 {
-	MyClass.SHead = MyClass.STail = NULL;
+	MyClass.SHead = MyClass.STail= NULL;
 }
 
 Student *createStudent(string Name, string ID, double Dtb)
@@ -86,7 +84,7 @@ void outputClass(Class MyClass)
 	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
 	{
 		printf("*Number %d: ", count);
-		cout << "Hoc sinh: " << i->Name << " MSSV: " << i->ID << " Diem: " << i->DiemTrungBinh << ";" << endl;
+		cout <<"Hoc sinh: "<< i->Name <<" MSSV: "<< i->ID <<" Diem: "<< i->DiemTrungBinh<<";"<<endl;
 		count++;
 	}
 }
@@ -134,7 +132,7 @@ void sortStudent(Class &myClass)
 void checkNStudent_Name(Class MyClass)
 {
 	string XName;
-	bool flag = false;
+	bool flag=false;
 	printf("?Student's name: ");
 	cin >> XName;
 	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
@@ -148,6 +146,18 @@ void checkNStudent_Name(Class MyClass)
 		printf("\n!Not found\n");
 }
 
+void outputFile(Class MyClass, int n)
+{
+	fstream f;
+	f.open("D:\outputStudent.txt", ios::out);
+	f <<"N= "<< n<< endl;
+	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
+	{
+		f << i->ID << " " << i->Name << " " << i->DiemTrungBinh << endl;
+	}
+	f.close();
+}
+
 int main()
 {
 	int n;
@@ -158,6 +168,7 @@ int main()
 	sortStudent(MyClass);
 	//outputClass(MyClass);
 	checkNStudent_Name(MyClass);
+	outputFile(MyClass, n);
 	system("pause");
 	return 0;
 }

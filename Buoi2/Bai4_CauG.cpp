@@ -1,9 +1,8 @@
-﻿//Bài 2: Dùng mảng một chiều để lưu trữ một lớp học có N sinh viên.Biết rằng mỗi sinh viên
-//bao gồm các thông tin sau : Tên(chuỗi ký tự), Mã số sinh viên(chuỗi ký tự), Điểm trung bình.
-//Hãy viết hàm thực hiện các yêu cầu sau :
-//d. Tìm một sinh viên có tên X trong lớp học (X nhập từ bàn phím)
+﻿
+// status: phan chen!? 
 
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <string>
 using namespace std;
@@ -20,11 +19,11 @@ struct Class
 {
 	Student *SHead;
 	Student *STail;
-};
+};	
 
 void initClass(Class &MyClass)
 {
-	MyClass.SHead = MyClass.STail = NULL;
+	MyClass.SHead = MyClass.STail= NULL;
 }
 
 Student *createStudent(string Name, string ID, double Dtb)
@@ -86,7 +85,7 @@ void outputClass(Class MyClass)
 	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
 	{
 		printf("*Number %d: ", count);
-		cout << "Hoc sinh: " << i->Name << " MSSV: " << i->ID << " Diem: " << i->DiemTrungBinh << ";" << endl;
+		cout <<"Hoc sinh: "<< i->Name <<" MSSV: "<< i->ID <<" Diem: "<< i->DiemTrungBinh<<";"<<endl;
 		count++;
 	}
 }
@@ -100,19 +99,19 @@ void sortStudent(Class &myClass)
 	Student *p, *pivot;
 	if (myClass.SHead == myClass.STail)
 		return;
-	pivot = myClass.SHead;
+	pivot = myClass.SHead; // cam canh
 	p = myClass.SHead->SNext;
 	while (p != NULL)
 	{
 		Student *q = p;
 		p = p->SNext;
 		q->SNext = NULL;
-		if (q->DiemTrungBinh > pivot->DiemTrungBinh)
+		if (q->DiemTrungBinh < pivot->DiemTrungBinh)
 			addClass(myClass1, q);
 		else
 			addClass(myClass2, q);
 	};
-
+	// Buoc de qui
 	sortStudent(myClass1);
 	sortStudent(myClass2);
 	// ghep noi ds 1 + pivot
@@ -130,34 +129,70 @@ void sortStudent(Class &myClass)
 	else
 		myClass.STail = pivot;
 }
-
-void checkNStudent_Name(Class MyClass)
+	
+void addTail(Class &MyClass, Student *p)
 {
-	string XName;
-	bool flag = false;
-	printf("?Student's name: ");
-	cin >> XName;
+	if (isEmptyClass(MyClass))
+		MyClass.SHead = MyClass.STail = p;
+	else
+	{
+		MyClass.STail->SNext = p;
+		MyClass.STail = p;
+	}
+}
+// chen 1 phan tu->info ==x sau phan tu->info ==xP
+void insertAfterP(Class &MyClass, string x_Name, string x_ID, int Dtb, string xP) 
+{
+	if (isEmptyClass(MyClass) == 0)
+	{
+		Student *q = createStudent(x_Name, x_ID, Dtb);
+		for (Student *p = MyClass.SHead; p != NULL; p = p->SNext)
+			if (p->ID == xP)
+			{
+				if (p == MyClass.SHead)
+				{
+					Student *temp = createStudent(x_Name, x_ID, Dtb);
+					addTail(MyClass, temp);
+				}
+				q->SNext = p->SNext;
+				p->SNext = q;
+				if (MyClass.STail == p)
+					MyClass.STail = q;
+				return;
+			}
+	}
+	else printf("list rong!");
+}
+
+void outputFile(Class MyClass, int n)
+{
+	fstream f;
+	f.open("D:\outputStudent.txt", ios::out);
+	f <<"N= "<< n<< endl;
 	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
-		if (i->Name == XName)
-		{
-			cout << "ID: " << i->ID;
-			flag = true;
-			break;
-		}
-	if (flag == false)
-		printf("\n!Not found\n");
+	{
+		f << i->ID << " " << i->Name << " " << i->DiemTrungBinh << endl;
+	}
+	f.close();
 }
 
 int main()
 {
 	int n;
+	string x_Name, x_ID, xP;
+	int Dtb;
 	Class MyClass;
 	initClass(MyClass);
 	inputClass(MyClass, n);
-	//outputClass(MyClass);
+	cout << "Chen 1 hoc sinh_ " << endl;
+	cout << "Ghi thong tin <Name> <MSSV> <DiemTrungBinh>" << endl;
+	cin >> x_Name >> x_ID >> Dtb;
+	cout << "Mssv cua sinh vien truoc: " << endl;
+	cin >> xP;
+	insertAfterP(MyClass, x_Name, x_ID, Dtb, xP);
 	sortStudent(MyClass);
-	//outputClass(MyClass);
-	checkNStudent_Name(MyClass);
+	outputClass(MyClass);
+	outputFile(MyClass, n);
 	system("pause");
 	return 0;
 }

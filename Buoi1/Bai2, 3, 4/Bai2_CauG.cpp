@@ -13,7 +13,7 @@ struct Student
 {
 	string Name;
 	string ID;
-	int DiemTrungBinh;
+	double DiemTrungBinh;
 	Student *SNext;
 };
 
@@ -21,14 +21,14 @@ struct Class
 {
 	Student *SHead;
 	Student *STail;
-};	
+};
 
 void initClass(Class &MyClass)
 {
-	MyClass.SHead = MyClass.STail= NULL;
+	MyClass.SHead = MyClass.STail = NULL;
 }
 
-Student *createStudent(string Name, string ID, int Dtb)
+Student *createStudent(string Name, string ID, double Dtb)
 {
 	Student *student = new Student;
 	if (student == NULL)
@@ -67,7 +67,7 @@ void inputClass(Class &MyClass, int &n)
 	for (int i = 0; i < n; i++)
 	{
 		string Name, ID;
-		int Dtb;
+		double Dtb;
 		printf("*Number %d:\n", i);
 		printf("Name: ");
 		cin >> Name;
@@ -87,7 +87,7 @@ void outputClass(Class MyClass)
 	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
 	{
 		printf("*Number %d: ", count);
-		cout <<"Hoc sinh: "<< i->Name <<" MSSV: "<< i->ID <<" Diem: "<< i->DiemTrungBinh<<";"<<endl;
+		cout << "Hoc sinh: " << i->Name << " MSSV: " << i->ID << " Diem: " << i->DiemTrungBinh << ";" << endl;
 		count++;
 	}
 }
@@ -131,7 +131,7 @@ void sortStudent(Class &myClass)
 	else
 		myClass.STail = pivot;
 }
-	
+
 void addTail(Class &MyClass, Student *p)
 {
 	if (isEmptyClass(MyClass))
@@ -143,7 +143,7 @@ void addTail(Class &MyClass, Student *p)
 	}
 }
 // chen 1 phan tu->info ==x sau phan tu->info ==xP
-void insertAfterP(Class &MyClass, string x_Name, string x_ID, int Dtb, string xP) 
+void insertAfterP(Class &MyClass, string x_Name, string x_ID, int Dtb, string xP)
 {
 	if (isEmptyClass(MyClass) == 0)
 	{

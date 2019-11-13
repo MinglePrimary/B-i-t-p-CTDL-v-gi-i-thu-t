@@ -12,7 +12,7 @@ struct Student
 {
 	string Name;
 	string ID;
-	int DiemTrungBinh;
+	double DiemTrungBinh;
 	Student *SNext;
 };
 
@@ -27,7 +27,7 @@ void initClass(Class &MyClass)
 	MyClass.SHead = MyClass.STail= NULL;
 }
 
-Student *createStudent(string Name, string ID, int Dtb)
+Student *createStudent(string Name, string ID, double Dtb)
 {
 	Student *student = new Student;
 	if (student == NULL)
@@ -66,7 +66,7 @@ void inputClass(Class &MyClass, int &n)
 	for (int i = 0; i < n; i++)
 	{
 		string Name, ID;
-		int Dtb;
+		double Dtb;
 		printf("*Number %d:\n", i);
 		printf("Name: ");
 		cin >> Name;

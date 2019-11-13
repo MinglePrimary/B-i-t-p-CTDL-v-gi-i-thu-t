@@ -1,9 +1,6 @@
-﻿//Bài 2: Dùng mảng một chiều để lưu trữ một lớp học có N sinh viên.Biết rằng mỗi sinh viên
-//bao gồm các thông tin sau : Tên(chuỗi ký tự), Mã số sinh viên(chuỗi ký tự), Điểm trung bình.
-//Hãy viết hàm thực hiện các yêu cầu sau :
-//e. Xoá một sinh viên có mã số cho trước trong lớp học. Nếu không có thì thông báo khong co
-
+﻿
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <string>
 using namespace std;
@@ -20,11 +17,11 @@ struct Class
 {
 	Student *SHead;
 	Student *STail;
-};
+};	
 
 void initClass(Class &MyClass)
 {
-	MyClass.SHead = MyClass.STail = NULL;
+	MyClass.SHead = MyClass.STail= NULL;
 }
 
 Student *createStudent(string Name, string ID, double Dtb)
@@ -86,7 +83,7 @@ void outputClass(Class MyClass)
 	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
 	{
 		printf("*Number %d: ", count);
-		cout << "Hoc sinh: " << i->Name << " MSSV: " << i->ID << " Diem: " << i->DiemTrungBinh << ";" << endl;
+		cout <<"Hoc sinh: "<< i->Name <<" MSSV: "<< i->ID <<" Diem: "<< i->DiemTrungBinh<<";"<<endl;
 		count++;
 	}
 }
@@ -142,6 +139,20 @@ int deleteStudentX(Class &MyClass)
 	return 1;
 }
 
+
+void outputFile(Class MyClass, int n)
+{
+	fstream f;
+	f.open("D:\outputStudent.txt", ios::out);
+	f <<"N= "<< n<< endl;
+	for (Student *i = MyClass.SHead; i != NULL; i = i->SNext)
+	{
+		f << i->ID << " " << i->Name << " " << i->DiemTrungBinh << endl;
+	}
+	f.close();
+}
+
+	
 int main()
 {
 	int n;
@@ -149,8 +160,9 @@ int main()
 	initClass(MyClass);
 	inputClass(MyClass, n);
 	int answer = deleteStudentX(MyClass);
-	cout << "		key=" << answer << " " << endl;
+	//cout <<"		key="<< answer <<" "<< endl;
 	outputClass(MyClass);
+	outputFile(MyClass, n);
 	system("pause");
 	return 0;
 }
